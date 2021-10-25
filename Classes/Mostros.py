@@ -1,6 +1,6 @@
 import pygame
 
-class monstro
+class Monstro:
     def __init__(self) -> None:
         #states monstro
         level = 3
