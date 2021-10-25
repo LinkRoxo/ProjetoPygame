@@ -26,14 +26,15 @@ class Jogador:
         velocidade_ataque = 10
 
         vigor = 0
+        chance_crit = 0
         chance_drop = 0.01
 
-        força = 0
-        dextreza = 0
-        agilidade = 0
-        inteligencia = 0
-        vitalidade = 0
-        sorte = 0
+        força = 0 #dano_fisico
+        dextreza = 0 #chance_crit
+        agilidade = 0 #velocidade_ataque
+        inteligencia = 0 #Mana / dano_magico
+        vitalidade = 0 # HP / Vigor
+        sorte = 0 #chance_drop / chance_crit
 
         #Stuff de controle do objeto
         Vel = 10
@@ -41,9 +42,8 @@ class Jogador:
         
         #Parametros de controle
         STATE = None
-        can_walk = False
+        walking = False
         jumping = False
-        pass
 
     def update(self) -> None:
         if self.Vida == 0:
@@ -63,27 +63,22 @@ class Jogador:
         alvo.hp = alvo.hp - dano
 
     def pulo(self):
-        self.possition = 0
-        pass    
+        self.possition = 0 
 
     def levelUp(self, qual):
         if qual == 0:
             base_xp = 0
             base_level =+ 1
             #aumenta xp necessaria
-            pass
         if qual == 1:
             job_xp = 0
             job_level =+ 1
             #aumenta a xp necessaria
-            pass
-        pass
 
     def die(self):
         #animação
         #tirar xp
         self.spawn()
-        pass
 
     
         
