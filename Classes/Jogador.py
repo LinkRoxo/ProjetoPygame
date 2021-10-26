@@ -19,31 +19,37 @@ class Jogador:
         Mana = 10
         MMana = 10
 
-        dano_fisico = (self.força * 0.1)
-        dano_magico = 0
-        dano_critico = dano_fisico * 2
-
-        velocidade_ataque = 10
-
-        vigor = 0
-        chance_crit = 0
-        chance_drop = 0.01
-
-        força = 0 #dano_fisico
+        forca = 0 #dano_fisico
         dextreza = 0 #chance_crit
         agilidade = 0 #velocidade_ataque
         inteligencia = 0 #Mana / dano_magico
         vitalidade = 0 # HP / Vigor
         sorte = 0 #chance_drop / chance_crit
 
+        #FORMULAS
+        #dano_fisico = (self.forca * 0.1)
+        #dano_magico = 0
+        #dano_critico = dano_fisico * 2
+
+        #velocidade_ataque = 10
+
+        vigor = 0
+        chance_crit = 0
+        chance_drop = 0.01
+
         #Stuff de controle do objeto
         Vel = 10
-        possition = pygame.math.Vector2(-1,-1)
+        possition = pygame.math.Vector2(10,10)
         
         #Parametros de controle
         STATE = None
         walking = False
         jumping = False
+
+        #Sprites
+        sprite = None
+        rect = None
+
 
     def update(self) -> None:
         if self.Vida == 0:
@@ -57,6 +63,7 @@ class Jogador:
         
     
     def spawn(self, possition):
+        print("Spawned")
         self.possition = possition
 
     def ataque(self, dano, alvo):
@@ -64,6 +71,13 @@ class Jogador:
 
     def pulo(self):
         self.possition = 0 
+
+    def addXp(self, Bqtd, Jqtd):
+        self.base_xp += Bqtd
+        self.jobe_xp += Jqtd
+
+    def addGold(self, qtd):
+        self.gold += qtd
 
     def levelUp(self, qual):
         if qual == 0:

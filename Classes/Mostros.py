@@ -2,6 +2,8 @@ import pygame
 
 class Monstro:
     def __init__(self) -> None:
+        monstro_id = -1
+
         #states monstro
         level = 3
         xp = 5
@@ -25,6 +27,10 @@ class Monstro:
         chance_drop = 0.01
 
         força = 1 #dano_fisico
+
+        #Sprites
+        sprite = None
+        rect = None
 
     def update(self) -> None:
         if self.Vida == 0:
