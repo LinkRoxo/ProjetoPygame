@@ -1,3 +1,4 @@
+import sys
 class Mapa:
     def __init__(self) -> None:
         map_id = -1
