@@ -1,3 +1,5 @@
+import pygame
+
 class Jogador:
     #Stats in game do Jogador
     base_level = 1
@@ -37,6 +39,7 @@ class Jogador:
     #Stuff de controle do objeto
     Vel = 10
     pos = (100, 350)
+    x, y = pos
         
     #Parametros de controle
     STATE = None
@@ -44,6 +47,7 @@ class Jogador:
     jumping = False
 
     #Sprites
+    rect = pygame.Rect(x, y, 30, 100)
     sprite = None 
     
     def __init__(self):
@@ -52,7 +56,9 @@ class Jogador:
     def get_pos(self):
         return self.pos
 
-    def update(self):
+    def update(self, surface):
+        pygame.draw.rect(surface, (5, 10, 100), self.rect)
+        
         if self.Vida <= 0:
             self.die(self)
 

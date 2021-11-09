@@ -1,10 +1,12 @@
 import pygame
 import sys
+
 sys.path.append(".")
 from Classes.Jogador import Jogador
 from Classes.Monstros import Monstro
+from Classes.State import State
 
-VERSION = "0.3"
+VERSION = "0.5"
 FPS = 60
 
 WIDTH, HEIGHT = 900, 500
@@ -12,21 +14,12 @@ WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 WIN.fill((0,0,0))
 pygame.display.set_caption(f"Jogo {VERSION}")
 
-mob = Monstro(1, "Slime", 1, 1, 10, 10, 10, 1)
+mob = Monstro(1, "Slime", 1, 1, 10, 10, 10, 1, WIN)
+
 
 def screen_update():
-    #WIN.blit(mob, (mob.pos))
     pygame.display.update()
 
-def spawn_player(jogador):
-    x,y = jogador.get_pos(jogador)
-    Prect = pygame.Rect(x, y, 30, 100)
-    pygame.draw.rect(WIN, (5 , 10, 100), Prect)
-
-def spawn_monstro(mob):
-    x, y = mob.get_pos()
-    Mrect = pygame.Rect(x, y, 30, 100)
-    pygame.draw.rect(WIN, (255, 0, 0), Mrect)
 
 def main():
     clock = pygame.time.Clock()
@@ -34,21 +27,22 @@ def main():
     #OBJETOS
     jogador = Jogador
     
-    spawn_monstro(mob)
 
     while run:
         clock.tick(FPS)
+        WIN.fill((0,0,0))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False  
 
-        spawn_player(jogador)
-        
-        
         if jogador.Vida == 0:
             jogador.die(jogador)
+
+        if mob.state == State.Batalhando:
+            if jogador.Vida != 0:
+                mob.ataque(jogador)
         
-        jogador.update(jogador)
+        jogador.update(jogador, WIN)
         mob.update(WIN)   
         
         screen_update()

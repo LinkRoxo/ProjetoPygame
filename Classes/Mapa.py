@@ -1,24 +1,27 @@
 import sys
+import Monstros as mob
+from enum import Enum
+
 class Mapa:
     def __init__(self) -> None:
-        map_id = -1
+        self.map_id = -1
         
-        velocidade = 10
-        mobs_do_mapa = []
-        lista_mob = []
+        self.velocidade = 10
+        self.mobs_do_mapa = []
+        self.lista_mob = []
 
-        bg_img = None
-        assets = []
+        self.bg_img = None
+        self.assets = []
 
-        Boss = None
+        self.Boss = None
 
-        armadilhas = []
+        self.armadilhas = []
         
-        tessouro = []
-        chance_tessouro = 1
+        self.tessouro = []
+        self.chance_tessouro = 1
 
         #ESTADOS
-        moving = False
+        self.moving = False
 
 
     def update(self):
@@ -28,8 +31,13 @@ class Mapa:
     def spawn_mob(self, mob):
         #criar a variavel que vai conter o mob, passar parametros apartir do ID (pegar na lista de mob)
         #adicionar no vetor mobs_do_mapa
+        
+        mob = ()
         pass
 
     def spawn_tessouro(self):
         pass
 
+class monstrosId(Enum):
+    Slime = 1    
+    pass

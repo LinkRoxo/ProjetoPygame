@@ -1,8 +1,14 @@
+import pygame
+import sys
+import math
+
+sys.path.append(".")
+from Classes.State import State
+
 class Monstro:
     monstro_id = -1
     nome_monstro = ""
 
-    #states monstro
     level = 0
     xp = 0
 
@@ -14,25 +20,33 @@ class Monstro:
     Mana = 0
     MMana = 0
 
-    poder = 0
+    poder = 1
     
-    dano_fisico = (poder * 0.1)
+    dano_fisico = math.ceil((poder * 0.1))
     dano_magico = 1
     dano_critico = dano_fisico * 1
 
-    velocidade_ataque = 10
+    velocidade_ataque = 0.4
+    contador = 0
         
     chance_crit = 0.06
 
+    #Stuff de controle do objeto
+    Vel = -5
+    pos = (800, 350)
+    x, y = pos
+
     #Sprites
     sprite = None
-    rect = None
+    rect = pygame.Rect(x, y, 30, 100)
 
-    #Stuff de controle do objeto
-    Vel = 10
-    pos = (800, 350)
+    surface = None
 
-    def __init__(self, m_id, nome, level, xp, gold, Mvida, Mmana, poder):
+    #STATES
+    state = State.Andando
+
+
+    def __init__(self, m_id, nome, level, xp, gold, Mvida, Mmana, poder, surface):
         self.monstro_id = m_id
         self.nome_monstro = nome
         self.level = level
@@ -42,21 +56,61 @@ class Monstro:
         self.MMana = Mmana
         self.poder = poder
 
+        self.surface = surface
+        self.contador = self.velocidade_ataque
+    
+
+    def draw_mob(self, surface):
+        self.rect = pygame.Rect(self.x, self.y, 30, 100)
+        pygame.draw.rect(surface, (255, 0, 0), self.rect)
+        pass
+
     def get_pos(self):
         return self.pos
 
     def update(self, surface):
-        print("chegou update monstro")
+        if self.state == State.Andando:
+            self.pos = (self.pos[0] + self.Vel), (self.pos[1])
+            self.x, self.y = self.pos
+        
+        self.draw_mob(surface)
+
+        if self.x <= 140:
+            self.set_State(1)
+
+
+        if self.state == State.Parado: #and (self.contador == self.velocidade_ataque)):
+            self.set_State(2)
+
         
         if self.Vida == 0:
             self.die()
         
-        self.pos = (self.pos[0] + self.Vel), (self.pos[1])
-
-    def ataque(self, dano, alvo):
-        alvo.hp = alvo.hp - dano
+    
+    def ataque(self, alvo):
+        alvo.hit(alvo, self.dano_fisico)
 
     def die(self):
         #animação
         #tirar xp
         pass
+
+    def get_rect(self, rect):
+        self.rect = rect
+        pass
+
+    def batalha():
+        
+        pass
+
+    def set_State(self, state):
+        if state == 0:
+            self.state = State.Andando
+        
+        if state == 1:
+            self.state = State.Parado
+
+        if state == 2:
+            self.state = State.Batalhando
+
+
