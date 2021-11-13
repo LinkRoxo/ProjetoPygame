@@ -5,6 +5,7 @@ sys.path.append(".")
 from Classes.Jogador import Jogador
 from Classes.Monstros import Monstro
 from Classes.State import State
+from Classes.Mapa import Mapa
 
 VERSION = "0.5"
 FPS = 60
@@ -14,7 +15,8 @@ WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 WIN.fill((0,0,0))
 pygame.display.set_caption(f"Jogo {VERSION}")
 
-mob = Monstro(1, "Slime", 1, 1, 10, 10, 10, 1, WIN)
+#mapa = Mapa(1)
+mob = Monstro(1, "Slime", 1, 1, 1, 10, 10, 10, 1, WIN)
 
 
 def screen_update():
@@ -37,6 +39,9 @@ def main():
 
         if jogador.Vida == 0:
             jogador.die(jogador)
+
+        if mob.Vida == 0:
+            mob.die(jogador)
 
         if mob.state == State.Batalhando:
             if jogador.Vida != 0:

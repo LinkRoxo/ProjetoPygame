@@ -10,7 +10,8 @@ class Monstro:
     nome_monstro = ""
 
     level = 0
-    xp = 0
+    Bxp = 0
+    Jxp = 0
 
     gold = 0
 
@@ -46,15 +47,19 @@ class Monstro:
     state = State.Andando
 
 
-    def __init__(self, m_id, nome, level, xp, gold, Mvida, Mmana, poder, surface):
+    def __init__(self, m_id, nome, level, Bxp, Jxp, gold, Mvida, Mmana, poder, surface):
         self.monstro_id = m_id
         self.nome_monstro = nome
         self.level = level
-        self.xp = xp
+        self.Bxp = Bxp
+        self.Jxp = Jxp
         self.gold = gold
         self.MVida = Mvida
         self.MMana = Mmana
         self.poder = poder
+
+        self.Vida = self.MVida
+        self.Mana = self.MMana
 
         self.surface = surface
         self.contador = self.velocidade_ataque
@@ -82,18 +87,18 @@ class Monstro:
         if self.state == State.Parado: #and (self.contador == self.velocidade_ataque)):
             self.set_State(2)
 
-        
-        if self.Vida == 0:
-            self.die()
-        
-    
+
     def ataque(self, alvo):
         alvo.hit(alvo, self.dano_fisico)
 
-    def die(self):
-        #animação
-        #tirar xp
+    def die(self, alvo):
+        alvo.addXp(alvo, self.Bxp, self.Jxp)
+        alvo.addGold(alvo,self.gold)
+        print("Monstro morreu")
         pass
+
+    def hit(self, dano):
+        self.Vida = self.Vida - dano
 
     def get_rect(self, rect):
         self.rect = rect

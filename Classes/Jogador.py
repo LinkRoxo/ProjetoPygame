@@ -1,14 +1,17 @@
 import pygame
+from Classes.State import State
 
 class Jogador:
     #Stats in game do Jogador
     base_level = 1
     base_xp = 0
     base_next_level = 10
+    base_pontos = 0
 
     job_level = 1
     job_xp = 0
     job_next_level = 10
+    job_pontos = 0
 
     gold = 0
 
@@ -42,7 +45,7 @@ class Jogador:
     x, y = pos
         
     #Parametros de controle
-    STATE = None
+    state = None
     walking = False
     jumping = False
 
@@ -63,10 +66,10 @@ class Jogador:
             self.die(self)
 
         if self.base_xp == self.base_next_level:
-            self.levelUp(0)
+            self.levelUp(self, 0)
 
         if self.job_xp == self.job_next_level:
-            self.levelUp(1)
+            self.levelUp(self, 1)
         
         
     def ataque(self, dano, alvo):
@@ -77,7 +80,7 @@ class Jogador:
 
     def addXp(self, Bqtd, Jqtd):
         self.base_xp += Bqtd
-        self.jobe_xp += Jqtd
+        self.job_xp += Jqtd
 
     def addGold(self, qtd):
         self.gold += qtd
@@ -85,12 +88,32 @@ class Jogador:
     def levelUp(self, qual):
         if qual == 0:
             self.base_xp = 0
-            self.base_level =+ 1
-            #aumenta xp necessaria
+            self.base_level += 1
+            self.base_pontos += 1
         if qual == 1:
             self.job_xp = 0
-            self.job_level =+ 1
-            #aumenta a xp necessaria
+            self.job_level += 1
+            self.job_pontos += 1
+
+    def addPonto(self, qual):
+        if qual == 0:
+            self.forca += 1
+            self.base_pontos -= 1
+        if qual == 1:
+            self.dextreza += 1
+            self.base_pontos -= 1
+        if qual == 2:
+            self.agilidade += 1
+            self.base_pontos -= 1
+        if qual == 3:
+            self.inteligencia += 1
+            self.base_pontos -= 1
+        if qual == 4:
+            self.vitalidade += 1
+            self.base_pontos -= 1
+        if qual == 5:
+            self.sorte += 1
+            self.base_pontos -= 1
 
     def hit(self, dano):
         self.Vida = self.Vida - dano
@@ -98,10 +121,10 @@ class Jogador:
 
     def die(self):
         #animação
-        #tirar xp
+        self.base_xp -= (self.base_xp / 100) * 0.1
+        self.job_xp -= (self.job_xp / 100) * 0.01
         print("morreu")
         pass
-
 
 #função de debug
     def kill(self):

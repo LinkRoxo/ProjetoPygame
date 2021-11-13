@@ -1,6 +1,6 @@
 import sys
-import Monstros as mob
 from enum import Enum
+from Classes.Monstros import Monstro
 
 class Mapa:
     def __init__(self) -> None:
@@ -31,7 +31,6 @@ class Mapa:
     def spawn_mob(self, mob):
         #criar a variavel que vai conter o mob, passar parametros apartir do ID (pegar na lista de mob)
         #adicionar no vetor mobs_do_mapa
-        
         mob = ()
         pass
 
