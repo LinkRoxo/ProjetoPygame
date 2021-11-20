@@ -63,6 +63,7 @@ class Monstro:
 
         self.surface = surface
         self.contador = self.velocidade_ataque
+        
     
 
     def draw_mob(self, surface):
@@ -81,7 +82,12 @@ class Monstro:
         self.draw_mob(surface)
 
         if self.Vida == 0:
-            self.die(jogador)
+            self.die()
+
+        if self.state == State.Batalhando:
+            """ if jogador.Vida != 0:
+                mob.ataque() """
+            pass
         
         if self.x <= 140:
             self.setState(1)
@@ -91,8 +97,9 @@ class Monstro:
             self.setState(2)
 
 
-    def ataque(self, alvo):
-        alvo.hit(alvo, self.dano_fisico)
+    def ataque(self):
+        #jogador.hit(self.dano_fisico)
+        pass
 
     def die(self, alvo):
         alvo.addXp(self.Bxp, self.Jxp)
