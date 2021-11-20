@@ -81,11 +81,11 @@ class Monstro:
         self.draw_mob(surface)
 
         if self.x <= 140:
-            self.set_State(1)
+            self.setState(1)
 
 
         if self.state == State.Parado: #and (self.contador == self.velocidade_ataque)):
-            self.set_State(2)
+            self.setState(2)
 
 
     def ataque(self, alvo):
@@ -108,7 +108,7 @@ class Monstro:
         
         pass
 
-    def set_State(self, state):
+    def setState(self, state):
         if state == 0:
             self.state = State.Andando
         

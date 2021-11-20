@@ -15,7 +15,7 @@ WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 WIN.fill((0,0,0))
 pygame.display.set_caption(f"Jogo {VERSION}")
 
-#mapa = Mapa(1)
+mapa = Mapa(1, 10, WIN)
 mob = Monstro(1, "Slime", 1, 1, 1, 10, 10, 10, 1, WIN)
 
 
