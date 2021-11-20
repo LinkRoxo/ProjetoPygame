@@ -80,6 +80,9 @@ class Monstro:
         
         self.draw_mob(surface)
 
+        if self.Vida == 0:
+            self.die(jogador)
+        
         if self.x <= 140:
             self.setState(1)
 
@@ -92,7 +95,7 @@ class Monstro:
         alvo.hit(alvo, self.dano_fisico)
 
     def die(self, alvo):
-        alvo.addXp(alvo, self.Bxp, self.Jxp)
+        alvo.addXp(self.Bxp, self.Jxp)
         alvo.addGold(alvo,self.gold)
         print("Monstro morreu")
         pass

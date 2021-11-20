@@ -3,6 +3,7 @@ import sys
 
 sys.path.append(".")
 from Classes.Jogador import Jogador
+jogador = Jogador()
 from Classes.Monstros import Monstro
 from Classes.State import State
 from Classes.Mapa import Mapa
@@ -18,7 +19,6 @@ pygame.display.set_caption(f"Jogo {VERSION}")
 mapa = Mapa(1, 10, WIN)
 mob = Monstro(1, "Slime", 1, 1, 1, 10, 10, 10, 1, WIN)
 
-
 def screen_update():
     pygame.display.update()
 
@@ -27,9 +27,6 @@ def main():
     clock = pygame.time.Clock()
     run = True
     #OBJETOS
-    jogador = Jogador
-    
-
     while run:
         clock.tick(FPS)
         WIN.fill((0,0,0))
@@ -47,7 +44,7 @@ def main():
             if jogador.Vida != 0:
                 mob.ataque(jogador)
         
-        jogador.update(jogador, WIN)
+        jogador.update(WIN)
         mob.update(WIN)   
         
         screen_update()
