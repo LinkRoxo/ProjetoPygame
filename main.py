@@ -37,6 +37,7 @@ def main():
         if jogador.Vida == 0:
             jogador.die(jogador)
 
+    
         jogador.update(WIN)
         mapa.update()
         

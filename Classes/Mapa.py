@@ -1,6 +1,7 @@
 import random
 from enum import Enum
 from Classes.Monstros import Monstro
+from Classes.Obstaculo import Obstaculo
 
 class Mapa:
     def __init__(self, map_id, vel, surface, jogador) -> None:
@@ -15,7 +16,7 @@ class Mapa:
 
         self.Boss = None
 
-        self.armadilhas = []
+        self.obstaculos = []
         
         self.tessouro = []
         self.chance_tessouro = 1
@@ -34,12 +35,15 @@ class Mapa:
 
         if self.contador <= 0:
             self.spawn_mob()
-            self.contator = 100
+            self.contador = 100
 
         if self.moving == True:
             pass
 
         for i in self.mobs_do_mapa:
+            i.update(self.surface)
+        
+        for i in self.obstaculos:
             i.update(self.surface)
 
     def spawn_tessouro(self):
@@ -85,7 +89,10 @@ class Mapa:
         mob_id = random.randint(1,10)
         mob = self.setMob(mob_id, self.surface)
         self.mobs_do_mapa.append(mob)
-        pass
+    
+    def spawn_obstaculo(self):
+        obs = Obstaculo()
+        self.obstaculos.append(obs)
 
 
 class monstrosId(Enum):
