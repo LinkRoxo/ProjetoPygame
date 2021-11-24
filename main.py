@@ -2,13 +2,11 @@ import pygame
 import sys
 
 sys.path.append(".")
-from Classes.Jogador import Jogador
-jogador = Jogador()
 from Classes.Monstros import Monstro
 from Classes.State import State
 from Classes.Mapa import Mapa
 
-VERSION = "0.5"
+VERSION = "0.7"
 FPS = 60
 
 WIDTH, HEIGHT = 900, 500
@@ -16,8 +14,8 @@ WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 WIN.fill((0,0,0))
 pygame.display.set_caption(f"Jogo {VERSION}")
 
-mapa = Mapa(1, 10, WIN, jogador)
-#mob = Monstro(1, "Slime", 1, 1, 1, 10, 10, 10, 1, WIN)
+mapa = Mapa(1, 10, WIN)
+
 
 def screen_update():
     pygame.display.update()
@@ -33,14 +31,12 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False  
-
-        if jogador.Vida == 0:
-            jogador.die(jogador)
-
-    
-        jogador.update(WIN)
+            if event.type == pygame.KEYDOWN:
+                tecla = pygame.key.get_pressed()
+                if tecla[pygame.K_SPACE]:
+                    mapa.botao()    
+   
         mapa.update()
-        
         screen_update()
     
     pygame.quit()

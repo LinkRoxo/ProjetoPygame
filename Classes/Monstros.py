@@ -5,7 +5,7 @@ import math
 sys.path.append(".")
 from Classes.State import State
 
-class Monstro:
+class Monstro():
     monstro_id = -1
     nome_monstro = ""
 
@@ -64,48 +64,35 @@ class Monstro:
         self.surface = surface
         self.contador = self.velocidade_ataque
         
-    
-
     def draw_mob(self, surface):
         self.rect = pygame.Rect(self.x, self.y, 30, 100)
         pygame.draw.rect(surface, (255, 0, 0), self.rect)
-        pass
 
     def get_pos(self):
         return self.pos
 
-    def update(self, surface):
-        if self.state == State.Andando:
+    def update(self, surface, state):
+        if state == State.Andando:
             self.pos = (self.pos[0] + self.Vel), (self.pos[1])
             self.x, self.y = self.pos
         
         self.draw_mob(surface)
 
-        if self.Vida == 0:
-            self.die()
-
-        if self.state == State.Batalhando:
-            """ if jogador.Vida != 0:
-                mob.ataque() """
-            pass
-        
-        if self.x <= 140:
+        if self.x <= 160:
             self.setState(1)
 
 
-        if self.state == State.Parado: #and (self.contador == self.velocidade_ataque)):
+        if state == State.Parado: #and (self.contador == self.velocidade_ataque)):
             self.setState(2)
 
 
     def ataque(self):
-        #jogador.hit(self.dano_fisico)
-        pass
+        return self.dano_fisico
 
-    def die(self, alvo):
-        alvo.addXp(self.Bxp, self.Jxp)
-        alvo.addGold(alvo,self.gold)
-        print("Monstro morreu")
-        pass
+
+    def die(self):
+        xp = self.Bxp
+        return xp
 
     def hit(self, dano):
         self.Vida = self.Vida - dano
@@ -115,7 +102,6 @@ class Monstro:
         pass
 
     def batalha():
-        
         pass
 
     def setState(self, state):
@@ -127,5 +113,4 @@ class Monstro:
 
         if state == 2:
             self.state = State.Batalhando
-
 

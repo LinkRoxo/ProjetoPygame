@@ -1,10 +1,13 @@
 import random
 from enum import Enum
 from Classes.Monstros import Monstro
-from Classes.Obstaculo import Obstaculo
+from Classes.Obstaculos import Obstaculo
+from Classes.State import State
+from Classes.Jogador import Jogador
+jogador = Jogador()
 
 class Mapa:
-    def __init__(self, map_id, vel, surface, jogador) -> None:
+    def __init__(self, map_id, vel, surface) -> None:
         self.map_id = map_id
         
         self.velocidade = vel
@@ -26,26 +29,57 @@ class Mapa:
         
         self.surface = surface
 
-        self.jogador = jogador
         self.contador = 100
+        self.state = State.Andando
 
 
     def update(self):
         self.contador -= 1
 
-        if self.contador <= 0:
+        if self.contador <= 0 and self.state == State.Andando:
             self.spawn_mob()
             self.contador = 100
+            self.spawn_obstaculo()
 
-        if self.moving == True:
-            pass
+        if jogador.Vida == 0:
+            jogador.die()
+
+        if jogador.pos[1] == 200 and jogador.state == State.Pulando:
+            jogador.change_state(4)
+
+        jogador.update(self.surface)
+
 
         for i in self.mobs_do_mapa:
-            i.update(self.surface)
-        
-        for i in self.obstaculos:
-            i.update(self.surface)
+            index = 0
+            index += 1
+            i.update(self.surface, self.state)
+            if i.Vida == 0:
+                xp = i.die()
+                jogador.addXp(xp, 0)
+                self.destroy_mob(index)
+                print(str(index))
+            if jogador.battle_rect.colliderect(i.rect) and jogador.state != State.Caindo:
+                self.state = State.Parado
+                jogador.change_state(4)
+                dano = jogador.ataque()
+                i.hit(dano)
+            if jogador.battle_rect.colliderect(i.rect) == False:
+                jogador.change_state(0)
 
+            if i.state == State.Batalhando:
+                if jogador.Vida != 0:
+                    dano = i.ataque()
+                    jogador.hit(dano)
+
+        for i in self.obstaculos:
+            i.update(self.surface, self.state)
+            if jogador.rect.colliderect(i.rect):
+                if i.relou == False:
+                    dano = i.ataque()
+                    jogador.hit(dano)
+
+        
     def spawn_tessouro(self):
         pass
 
@@ -91,10 +125,12 @@ class Mapa:
         self.mobs_do_mapa.append(mob)
     
     def spawn_obstaculo(self):
-        obs = Obstaculo()
+        obs = Obstaculo(100,100)
         self.obstaculos.append(obs)
 
+    def destroy_mob(self, mob):
+        self.mobs_do_mapa.pop(mob)
+        print("poped")
 
-class monstrosId(Enum):
-    Slime = 1    
-    pass
+    def botao(self):
+        jogador.change_state(3)

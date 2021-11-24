@@ -1,4 +1,5 @@
 import pygame
+import os
 from Classes.State import State
 
 class Jogador:
@@ -21,15 +22,15 @@ class Jogador:
     Mana = 10
     MMana = 10
 
-    forca = 0 #dano_fisico
-    dextreza = 0 #chance_crit
-    agilidade = 0 #velocidade_ataque
-    inteligencia = 0 #Mana / dano_magico
-    vitalidade = 0 # HP / Vigor
-    sorte = 0 #chance_drop / chance_crit
+    forca = 1 #dano_fisico
+    dextreza = 1 #chance_crit
+    agilidade = 1 #velocidade_ataque
+    inteligencia = 1 #Mana / dano_magico
+    vitalidade = 1 # HP / Vigor
+    sorte = 1 #chance_drop / chance_crit
 
         #FORMULAS
-    dano_fisico = (forca * 0.1)
+    dano_fisico = (forca * 2)
     dano_magico = 0
     dano_critico = dano_fisico * 2
 
@@ -50,30 +51,71 @@ class Jogador:
     jumping = False
 
     #Sprites
-    rect = pygame.Rect(x, y, 30, 100)
-    sprite = None 
-    
+    sprite = pygame.sprite.Sprite()
+    sprite_group = pygame.sprite.Group()
+    sprite_path = pygame.Rect(x, y, 100, 100) #pygame.transform.scale(pygame.image.load(os.path.join("Assets/Jogador/Parado", "adventurer-idle-00.png")), (50, 100))
+    rect = None
+    battle_rect = pygame.Rect(160, 380, 20, 20)
+
     def __init__(self):
+        #self.rect = self.sprite_path.get_rect()
+        self.rect = self.sprite_path
+        self.state = State.Andando
+        #self.sprite_group.add(self.sprite_path)
         pass
         
     def get_pos(self):
         return self.pos
 
-    def update(self, surface):
-        pygame.draw.rect(surface, (5, 10, 100), self.rect)
-        
+    def draw_jogador(self, surface):
+        self.rect.topleft = [self.x, self.y]
+        pygame.draw.rect(surface, (255, 255, 255), self.rect)
+        #self.sprite_group.draw()
+
+        #pygame.draw.rect(surface, (255,0,255), self.battle_rect)
+
+    def update(self, surface): 
+        print(str(self.state))
         if self.Vida <= 0:
-            self.die(self)
+            self.die()
 
         if self.base_xp == self.base_next_level:
-            self.levelUp(self, 0)
+            self.levelUp(0)
 
         if self.job_xp == self.job_next_level:
-            self.levelUp(self, 1)
+            self.levelUp(1)
+
+        if self.state == State.Pulando:
+            self.pulando()
+            self.draw_jogador(surface)  
+            
+        if self.state == State.Caindo:
+            self.gravity()
+            self.draw_jogador(surface)
+
+        if self.state == State.Batalhando:
+            self.ataque(self.dano_fisico, alvo)
+
+        self.draw_jogador(surface)
+
+    def pulando(self):  
+        if self.pos[1] >= 200:
+            self.pos = self.pos[0] , self.pos[1] - 10
+            self.x, self.y = self.pos
         
-        
-    def ataque(self, dano, alvo):
-        alvo.hp = alvo.hp - dano
+
+    def change_state(self,state):
+        if state == 0:
+            self.state = State.Andando
+        if state == 2:
+            self.state = State.Batalhando
+        if state == 3:
+            self.state = State.Pulando
+        if state == 4:
+            self.state = State.Caindo
+
+    def ataque(self):
+        return self.dano_fisico
 
     def pulo(self):
         self.possition = 0 
@@ -117,14 +159,22 @@ class Jogador:
 
     def hit(self, dano):
         self.Vida = self.Vida - dano
-        print("Vida: " + str(self.Vida))
 
+    def gravity(self):
+        if self.state == State.Caindo or self.state == State.Batalhando and self.y >= 200:
+            self.pos = self.pos[0] , self.pos[1] + 5
+            self.x, self.y = self.pos
+            if self.pos[1] == 350:
+                self.change_state(0)
+        pass
+    
     def die(self):
         #animação
         self.base_xp -= (self.base_xp / 100) * 0.1
         self.job_xp -= (self.job_xp / 100) * 0.01
-        print("morreu")
         pass
+
+
 
 #função de debug
     def kill(self):
