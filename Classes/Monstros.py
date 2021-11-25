@@ -44,7 +44,7 @@ class Monstro(pygame.sprite.Sprite):
     state = State.Andando
 
 
-    def __init__(self, m_id, nome, level, Bxp, Jxp, gold, Mvida, Mmana, poder, surface):
+    def __init__(self, m_id, nome, level, Bxp, Jxp, gold, Mvida, Mmana, poder, surface, jogador):
         super().__init__()
         self.monstro_id = m_id
         self.nome_monstro = nome
@@ -62,9 +62,11 @@ class Monstro(pygame.sprite.Sprite):
         self.surface = surface
         self.contador = self.velocidade_ataque
 
-        self.image = pygame.Surface((30, 100))
+        self.image = pygame.Surface((50, 100))
         self.rect = self.image.get_rect()
         self.image.fill((255, 0, 0))
+        
+        self.jogador = jogador
         
 
     def draw(self, surface):
@@ -74,7 +76,7 @@ class Monstro(pygame.sprite.Sprite):
         return self.pos
 
     def update(self, surface, state):
-        self.rect = pygame.Rect(self.x, self.y, 30, 100)
+        self.rect = pygame.Rect(self.x, self.y, 50, 100)
         
         if state == State.Andando:
             self.pos = (self.pos[0] + self.Vel), (self.pos[1])
@@ -85,19 +87,32 @@ class Monstro(pygame.sprite.Sprite):
         if self.x <= 160:
             self.setState(1)
 
-        if state == State.Parado: #and (self.contador == self.velocidade_ataque)):
+        if self.Vida == 0:
+            xp = self.die()
+            
+        if self.rect.colliderect(self.jogador.battle_rect): #and self.jogador.state == State.Andando:
+            self.jogador.change_state(2)
+            dano = self.jogador.ataque()
+            self.hit(dano)
+        
+        if self.state == State.Parado: #and (self.contador == self.velocidade_ataque)):
             self.setState(2)
 
+        if self.state == State.Batalhando:
+            if self.jogador.Vida > 0:
+                dano = self.ataque()
+                self.jogador.hit(dano)        
 
+        
     def ataque(self):
         return self.dano_fisico
 
 
     def die(self):
         xp = self.Bxp
+        self.jogador.addXp(xp, 0)
         self.kill()
-        print("chegou")
-        return xp
+        
 
     def hit(self, dano):
         self.Vida = self.Vida - dano

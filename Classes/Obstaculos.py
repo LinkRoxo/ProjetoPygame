@@ -24,7 +24,7 @@ class Obstaculo(pygame.sprite.Sprite):
         self.altura = altura 
         self.image = pygame.Surface((largura, altura))
         self.rect = self.image.get_rect()
-        self.image.fill((255,0,0))
+        self.image.fill((255,0,255))
 
     def draw(self, surface):
         pygame.draw.rect(surface, (125, 204, 143), self.rect)
@@ -35,7 +35,7 @@ class Obstaculo(pygame.sprite.Sprite):
             self.pos = (self.pos[0] + self.vel), (self.pos[1])
             self.x, self.y = self.pos
             
-        if self.pos[0] == -10:
+        if self.pos[0] == -100:
             self.kill()
         
     def ataque(self):
