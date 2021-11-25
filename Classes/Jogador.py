@@ -47,13 +47,12 @@ class Jogador:
         
     #Parametros de controle
     state = None
-    walking = False
     jumping = False
 
     #Sprites
     sprite = pygame.sprite.Sprite()
     sprite_group = pygame.sprite.Group()
-    sprite_path = pygame.Rect(x, y, 100, 100) #pygame.transform.scale(pygame.image.load(os.path.join("Assets/Jogador/Parado", "adventurer-idle-00.png")), (50, 100))
+    sprite_path = pygame.Rect(x, y, 50, 100) #pygame.transform.scale(pygame.image.load(os.path.join("Assets/Jogador/Parado", "adventurer-idle-00.png")), (50, 100))
     rect = None
     battle_rect = pygame.Rect(160, 380, 20, 20)
 
@@ -72,7 +71,7 @@ class Jogador:
         pygame.draw.rect(surface, (255, 255, 255), self.rect)
         #self.sprite_group.draw()
 
-        #pygame.draw.rect(surface, (255,0,255), self.battle_rect)
+        pygame.draw.rect(surface, (255,0,255), self.battle_rect)
 
     def update(self, surface): 
         print(str(self.state))
@@ -94,13 +93,13 @@ class Jogador:
             self.draw_jogador(surface)
 
         if self.state == State.Batalhando:
-            self.ataque(self.dano_fisico, alvo)
+            self.ataque()
 
         self.draw_jogador(surface)
 
     def pulando(self):  
         if self.pos[1] >= 200:
-            self.pos = self.pos[0] , self.pos[1] - 10
+            self.pos = self.pos[0] , self.pos[1] -10
             self.x, self.y = self.pos
         
 
@@ -109,8 +108,9 @@ class Jogador:
             self.state = State.Andando
         if state == 2:
             self.state = State.Batalhando
-        if state == 3:
+        if state == 3 and self.jumping == False:
             self.state = State.Pulando
+            self.jumping = True 
         if state == 4:
             self.state = State.Caindo
 
@@ -161,12 +161,11 @@ class Jogador:
         self.Vida = self.Vida - dano
 
     def gravity(self):
-        if self.state == State.Caindo or self.state == State.Batalhando and self.y >= 200:
-            self.pos = self.pos[0] , self.pos[1] + 5
-            self.x, self.y = self.pos
-            if self.pos[1] == 350:
-                self.change_state(0)
-        pass
+        self.pos = self.pos[0] , self.pos[1] + 5
+        self.x, self.y = self.pos
+        if self.pos[1] == 350:
+            self.change_state(0)
+            self.jumping = False
     
     def die(self):
         #animação

@@ -37,9 +37,10 @@ class Mapa:
         self.contador -= 1
 
         if self.contador <= 0 and self.state == State.Andando:
-            self.spawn_mob()
+            #self.spawn_mob()
             self.contador = 100
-            self.spawn_obstaculo()
+            """ self.spawn_obstaculo() """
+            pass
 
         if jogador.Vida == 0:
             jogador.die()
@@ -54,21 +55,21 @@ class Mapa:
             index = 0
             index += 1
             i.update(self.surface, self.state)
+            
             if i.Vida == 0:
                 xp = i.die()
                 jogador.addXp(xp, 0)
                 self.destroy_mob(index)
                 print(str(index))
-            if jogador.battle_rect.colliderect(i.rect) and jogador.state != State.Caindo:
+            
+            if jogador.battle_rect.colliderect(i.rect) and jogador.state == State.Andando:
                 self.state = State.Parado
-                jogador.change_state(4)
+                jogador.change_state(2)
                 dano = jogador.ataque()
                 i.hit(dano)
-            if jogador.battle_rect.colliderect(i.rect) == False:
-                jogador.change_state(0)
-
+            
             if i.state == State.Batalhando:
-                if jogador.Vida != 0:
+                if jogador.Vida <= 0:
                     dano = i.ataque()
                     jogador.hit(dano)
 
