@@ -10,6 +10,7 @@ VERSION = "0.7"
 FPS = 60
 
 WIDTH, HEIGHT = 900, 500
+global WIN 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 WIN.fill((0,0,0))
 pygame.display.set_caption(f"Jogo {VERSION}")
@@ -27,6 +28,7 @@ def main():
     #OBJETOS
     while run:
         clock.tick(FPS)
+        #DELTA TIME
         WIN.fill((0,0,0))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

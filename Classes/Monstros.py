@@ -5,7 +5,7 @@ import math
 sys.path.append(".")
 from Classes.State import State
 
-class Monstro():
+class Monstro(pygame.sprite.Sprite):
     monstro_id = -1
     nome_monstro = ""
 
@@ -37,9 +37,6 @@ class Monstro():
     pos = (800, 350)
     x, y = pos
 
-    #Sprites
-    sprite = None
-    rect = pygame.Rect(x, y, 30, 100)
 
     surface = None
 
@@ -48,6 +45,7 @@ class Monstro():
 
 
     def __init__(self, m_id, nome, level, Bxp, Jxp, gold, Mvida, Mmana, poder, surface):
+        super().__init__()
         self.monstro_id = m_id
         self.nome_monstro = nome
         self.level = level
@@ -63,24 +61,29 @@ class Monstro():
 
         self.surface = surface
         self.contador = self.velocidade_ataque
+
+        self.image = pygame.Surface((30, 100))
+        self.rect = self.image.get_rect()
+        self.image.fill((255, 0, 0))
         
-    def draw_mob(self, surface):
-        self.rect = pygame.Rect(self.x, self.y, 30, 100)
+
+    def draw(self, surface):
         pygame.draw.rect(surface, (255, 0, 0), self.rect)
 
     def get_pos(self):
         return self.pos
 
     def update(self, surface, state):
+        self.rect = pygame.Rect(self.x, self.y, 30, 100)
+        
         if state == State.Andando:
             self.pos = (self.pos[0] + self.Vel), (self.pos[1])
             self.x, self.y = self.pos
         
-        self.draw_mob(surface)
+        #self.draw(surface)
 
         if self.x <= 160:
             self.setState(1)
-
 
         if state == State.Parado: #and (self.contador == self.velocidade_ataque)):
             self.setState(2)
@@ -92,6 +95,8 @@ class Monstro():
 
     def die(self):
         xp = self.Bxp
+        self.kill()
+        print("chegou")
         return xp
 
     def hit(self, dano):

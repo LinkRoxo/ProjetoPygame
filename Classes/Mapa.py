@@ -1,4 +1,6 @@
 import random
+import pygame
+
 from enum import Enum
 from Classes.Monstros import Monstro
 from Classes.Obstaculos import Obstaculo
@@ -11,7 +13,7 @@ class Mapa:
         self.map_id = map_id
         
         self.velocidade = vel
-        self.mobs_do_mapa = []
+        self.mobs_do_mapa = pygame.sprite.Group()
         self.lista_mob = []
 
         self.bg_img = None
@@ -19,7 +21,7 @@ class Mapa:
 
         self.Boss = None
 
-        self.obstaculos = []
+        self.obstaculos = pygame.sprite.Group()
         
         self.tessouro = []
         self.chance_tessouro = 1
@@ -37,9 +39,9 @@ class Mapa:
         self.contador -= 1
 
         if self.contador <= 0 and self.state == State.Andando:
-            #self.spawn_mob()
+            self.spawn_mob()
             self.contador = 100
-            """ self.spawn_obstaculo() """
+            self.spawn_obstaculo() 
             pass
 
         if jogador.Vida == 0:
@@ -49,6 +51,10 @@ class Mapa:
             jogador.change_state(4)
 
         jogador.update(self.surface)
+
+
+        self.mobs_do_mapa.update(self.surface, self.state)
+        self.mobs_do_mapa.draw(surface)
 
 
         for i in self.mobs_do_mapa:
@@ -73,12 +79,18 @@ class Mapa:
                     dano = i.ataque()
                     jogador.hit(dano)
 
-        for i in self.obstaculos:
+            self.obstaculos.update(self.surface, self.state)
+            self.obstaculos.draw(self.surface)
+
+
+
+        """ for i in self.obstaculos:
             i.update(self.surface, self.state)
             if jogador.rect.colliderect(i.rect):
                 if i.relou == False:
                     dano = i.ataque()
-                    jogador.hit(dano)
+                    jogador.hit(dano) """
+        
 
         
     def spawn_tessouro(self):
@@ -123,11 +135,11 @@ class Mapa:
         #adicionar no vetor mobs_do_mapa
         mob_id = random.randint(1,10)
         mob = self.setMob(mob_id, self.surface)
-        self.mobs_do_mapa.append(mob)
+        self.mobs_do_mapa.add(mob)
     
     def spawn_obstaculo(self):
         obs = Obstaculo(100,100)
-        self.obstaculos.append(obs)
+        self.obstaculos.add(obs)
 
     def destroy_mob(self, mob):
         self.mobs_do_mapa.pop(mob)

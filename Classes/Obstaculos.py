@@ -4,7 +4,7 @@ from Classes.State import State
 
 sys.path.append(".")
 
-class Obstaculo:
+class Obstaculo(pygame.sprite.Sprite):
     pos = (800, 350)
     x, y = pos
     largura = 0
@@ -12,7 +12,6 @@ class Obstaculo:
     dano = 10
     
     sprite = None
-    rect = pygame.Rect(x, y, 0, 0)
     
     vel = -10
     
@@ -20,22 +19,24 @@ class Obstaculo:
     relou = False
     
     def __init__(self,largura,altura):
+        super().__init__()
         self.largura = largura
         self.altura = altura 
+        self.image = pygame.Surface((largura, altura))
+        self.rect = self.image.get_rect()
+        self.image.fill((255,0,0))
 
-    def draw_obstaculo(self, surface):
-        self.rect = pygame.Rect(self.x, self.y, self.largura, self.altura)
+    def draw(self, surface):
         pygame.draw.rect(surface, (125, 204, 143), self.rect)
 
     def update(self, surface, state):
-        self.draw_obstaculo(surface)
-        
+        self.rect = pygame.Rect(self.x, self.y, self.largura, self.altura)
         if state == State.Andando:
             self.pos = (self.pos[0] + self.vel), (self.pos[1])
             self.x, self.y = self.pos
             
         if self.pos[0] == -10:
-            self.destroy()
+            self.kill()
         
     def ataque(self):
         dano = self.dano

@@ -2,7 +2,7 @@ import pygame
 import os
 from Classes.State import State
 
-class Jogador:
+class Jogador(pygame.sprite.Sprite):
     #Stats in game do Jogador
     base_level = 1
     base_xp = 0
@@ -49,18 +49,25 @@ class Jogador:
     state = None
     jumping = False
 
-    #Sprites
-    sprite = pygame.sprite.Sprite()
+    #Sprites    
+    """ sprite = pygame.sprite.Sprite()
     sprite_group = pygame.sprite.Group()
     sprite_path = pygame.Rect(x, y, 50, 100) #pygame.transform.scale(pygame.image.load(os.path.join("Assets/Jogador/Parado", "adventurer-idle-00.png")), (50, 100))
-    rect = None
-    battle_rect = pygame.Rect(160, 380, 20, 20)
+    rect = None"""
+    
+    battle_rect = pygame.Rect(160, 380, 20, 20) 
 
     def __init__(self):
-        #self.rect = self.sprite_path.get_rect()
-        self.rect = self.sprite_path
+        super().__init__()
+        self.image = pygame.Surface((50, 100))
+        self.rect = self.image.get_rect()
+        self.image.fill((pygame.Color('red')))
+
+        
+        
+
         self.state = State.Andando
-        #self.sprite_group.add(self.sprite_path)
+        
         pass
         
     def get_pos(self):
@@ -71,10 +78,9 @@ class Jogador:
         pygame.draw.rect(surface, (255, 255, 255), self.rect)
         #self.sprite_group.draw()
 
-        pygame.draw.rect(surface, (255,0,255), self.battle_rect)
+        #pygame.draw.rect(surface, (255,0,255), self.battle_rect)
 
     def update(self, surface): 
-        print(str(self.state))
         if self.Vida <= 0:
             self.die()
 
